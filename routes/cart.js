@@ -11,7 +11,7 @@ router.get("/:id_usuario", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT CP.id_producto, P.nombre_producto, P.descripcion, P.precio, 
-        CP.cantidad, P.color, P.talla
+        CP.cantidad, P.color, P.talla, P.imagen
        FROM Carritos C
        JOIN Carritos_Productos CP ON C.id_carrito = CP.id_carrito
        JOIN Productos P ON CP.id_producto = P.id_producto
