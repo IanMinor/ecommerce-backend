@@ -8,7 +8,13 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/orders");
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'https://emmit.castelancarpinteyro.com', 
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Ruta raíz para verificar que el servidor funciona
