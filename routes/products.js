@@ -39,7 +39,12 @@ router.get("/", async (req, res) => {
     res.status(200).json(rows);
   } catch (error) {
     console.error("Error al obtener productos filtrados:", error);
-    res.status(500).json({ message: "No se pudieron obtener los productos" });
+    res.status(500).json({ message: "No se pudieron obtener los productos", error: error.message, db: {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      database: process.env.DB_DATABASE,
+      port: process.env.DB_PORT
+    }});
   }
 });
 
