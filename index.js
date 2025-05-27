@@ -19,11 +19,6 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-// Ruta raíz para verificar que el servidor funciona
-app.get("/", (req, res) => {
-  res.json({ message: "API is running" });
-});
-
 // rutas
 app.use("/api/products", productRoutes);
 app.use("/api", authRoutes);
