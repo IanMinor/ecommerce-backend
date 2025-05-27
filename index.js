@@ -30,18 +30,6 @@ app.use("/api", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
-// Desde aqui
-const path = require("path");
-
-// Servir archivos estáticos del frontend (por ejemplo, Vite)
-app.use(express.static(path.join(__dirname, "dist")));
-
-// Catch-all: cualquier ruta que no sea API devuelve el index.html del frontend
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-// Hasta aqui
-
 // Conexión a la base de datos
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
