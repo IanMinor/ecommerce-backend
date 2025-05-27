@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(contraseña, saltRounds);
 
     await pool.query(
-      `INSERT INTO Usuarios (nombre, apellido, numero_telefono, email, contraseña)
+      `INSERT INTO usuarios (nombre, apellido, numero_telefono, email, contraseña)
        VALUES (?, ?, ?, ?, ?)`,
       [nombre, apellido, numero_telefono, email, hashedPassword] // Guardamos el hash, no la contraseña en texto plano
     );
@@ -40,7 +40,7 @@ const loginUser = async (req, res) => {
   try {
     // Buscar usuario por email
     const [rows] = await pool.query(
-      "SELECT * FROM Usuarios WHERE email = ?",
+      "SELECT * FROM usuarios WHERE email = ?",
       [email]
     );
 
