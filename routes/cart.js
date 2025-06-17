@@ -11,10 +11,9 @@ router.get("/:id_usuario", async (req, res) => {
   try {
     const [rows] = await pool.query(
       `SELECT CP.id_producto, P.nombre_producto, P.descripcion, P.precio, 
-        CP.cantidad, P.color, P.talla, P.imagen
-       FROM Carritos C
-       JOIN Carritos_Productos CP ON C.id_carrito = CP.id_carrito
-       JOIN Productos P ON CP.id_producto = P.id_producto
+        CP.cantidad, P.color, P.talla, P.imagen      FROM carritos C
+      JOIN carritos_productos CP ON C.id_carrito = CP.id_carrito
+      JOIN productos P ON CP.id_producto = P.id_producto
        WHERE C.id_usuario = ? AND C.estado_carrito = 1`,
       [id_usuario]
     );
@@ -32,7 +31,7 @@ router.delete("/:id_usuario/:id_producto", async (req, res) => {
   try {
     // Obtener el carrito activo del usuario
     const [carritoRows] = await pool.query(
-      "SELECT id_carrito FROM Carritos WHERE id_usuario = ? AND estado_carrito = 1",
+      "SELECT id_carrito FROM carritos WHERE id_usuario = ? AND estado_carrito = 1",
       [id_usuario]
     );
 
@@ -46,7 +45,7 @@ router.delete("/:id_usuario/:id_producto", async (req, res) => {
 
     // Eliminar producto del carrito
     await pool.query(
-      "DELETE FROM Carritos_Productos WHERE id_carrito = ? AND id_producto = ?",
+      "DELETE FROM carritos_productos WHERE id_carrito = ? AND id_producto = ?",
       [id_carrito, id_producto]
     );
 

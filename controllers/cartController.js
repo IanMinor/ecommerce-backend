@@ -6,7 +6,7 @@ const addToCart = async (req, res) => {
   try {
     // Buscar carrito activo
     const [carrito] = await pool.query(
-      "SELECT id_carrito FROM Carritos WHERE id_usuario = ? AND estado_carrito = 1",
+      "SELECT id_carrito FROM carritos WHERE id_usuario = ? AND estado_carrito = 1",
       [id_usuario]
     );
 
@@ -15,7 +15,7 @@ const addToCart = async (req, res) => {
     if (carrito.length === 0) {
       // Crear carrito nuevo
       const [result] = await pool.query(
-        "INSERT INTO Carritos (id_usuario, estado_carrito) VALUES (?, 1)",
+        "INSERT INTO carritos (id_usuario, estado_carrito) VALUES (?, 1)",
         [id_usuario]
       );
       id_carrito = result.insertId;
@@ -25,20 +25,20 @@ const addToCart = async (req, res) => {
 
     // Verificar si ya existe el producto en el carrito
     const [existe] = await pool.query(
-      "SELECT * FROM Carritos_Productos WHERE id_carrito = ? AND id_producto = ?",
+      "SELECT * FROM carritos_productos WHERE id_carrito = ? AND id_producto = ?",
       [id_carrito, id_producto]
     );
 
     if (existe.length > 0) {
       // Ya está, actualizar cantidad
       await pool.query(
-        "UPDATE Carritos_Productos SET cantidad = cantidad + ? WHERE id_carrito = ? AND id_producto = ?",
+        "UPDATE carritos_productos SET cantidad = cantidad + ? WHERE id_carrito = ? AND id_producto = ?",
         [cantidad, id_carrito, id_producto]
       );
     } else {
       // Agregar nuevo producto
       await pool.query(
-        "INSERT INTO Carritos_Productos (id_carrito, id_producto, cantidad) VALUES (?, ?, ?)",
+        "INSERT INTO carritos_productos (id_carrito, id_producto, cantidad) VALUES (?, ?, ?)",
         [id_carrito, id_producto, cantidad]
       );
     }

@@ -13,8 +13,7 @@ router.get("/", async (req, res) => {
   const size = normalizeParam(req.query.size);
   const color = normalizeParam(req.query.color);
   const category = normalizeParam(req.query.category);
-
-  let query = `SELECT * FROM Productos WHERE precio >= ?`;
+  let query = `SELECT * FROM productos WHERE precio >= ?`;
   let params = [minPrice];
 
   // Manejo de arrays en query (si vienen del frontend como múltiples ?key=value)
@@ -39,16 +38,20 @@ router.get("/", async (req, res) => {
     res.status(200).json(rows);
   } catch (error) {
     console.error("Error al obtener productos filtrados:", error);
-    res.status(500).json({ message: "No se pudieron obtener los productos" });
+    res.status(500).json({ message: "No se pudieron obtener los productos", error: error.message, db: {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      database: process.env.DB_DATABASE,
+      port: process.env.DB_PORT
+    }});
   }
 });
 
 // Obtener un solo producto por ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  try {
-    const [rows] = await pool.query(
-      "SELECT * FROM Productos WHERE id_producto = ?",
+  try {    const [rows] = await pool.query(
+      "SELECT * FROM productos WHERE id_producto = ?",
       [id]
     );
 
@@ -64,13 +67,12 @@ router.get("/:id", async (req, res) => {
 });
 
 // Obtener filtros únicos desde Productos
-router.get("/filters/options", async (req, res) => {
-  try {
+router.get("/filters/options", async (req, res) => {  try {
     const [categories] = await pool.query(
-      "SELECT DISTINCT categoria FROM Productos"
+      "SELECT DISTINCT categoria FROM productos"
     );
-    const [colors] = await pool.query("SELECT DISTINCT color FROM Productos");
-    const [sizes] = await pool.query("SELECT DISTINCT talla FROM Productos");
+    const [colors] = await pool.query("SELECT DISTINCT color FROM productos");
+    const [sizes] = await pool.query("SELECT DISTINCT talla FROM productos");
 
     res.status(200).json({
       categories: categories.map((c) => c.categoria),

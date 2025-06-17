@@ -8,13 +8,16 @@ const cartRoutes = require("./routes/cart");
 const orderRoutes = require("./routes/orders");
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-// Ruta raíz para verificar que el servidor funciona
-app.get("/", (req, res) => {
-  res.json({ message: "API is running" });
-});
+const corsOptions = {
+  // Se modifico
+  origin: ['https://emmit.castelancarpinteyro.com', 'http://emmit.castelancarpinteyro.com'],
+  optionsSuccessStatus: 200,
+  credentials: true //No estaba
+};
+app.use(cors(corsOptions));
+
+app.use(express.json());
 
 // rutas
 app.use("/api/products", productRoutes);
@@ -23,7 +26,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 // Conexión a la base de datos
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
